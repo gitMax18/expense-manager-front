@@ -1,0 +1,7 @@
+@use "variables" as v;
+
+.label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: v.$spacing-sm;
+}

@@ -1,0 +1,5 @@
+@use "variables" as v;
+
+.item {
+  padding: v.$spacing-sm 0;
+}

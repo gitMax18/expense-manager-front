@@ -1,0 +1,14 @@
+@use "variables" as v;
+
+::ng-deep {
+  .p-card {
+    width: v.$auth-card-width;
+  }
+}
+
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

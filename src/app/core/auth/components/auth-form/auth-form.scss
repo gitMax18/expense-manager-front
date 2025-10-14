@@ -1,0 +1,8 @@
+@use "variables" as v;
+
+::ng-deep {
+  .p-button {
+    margin-top: v.$spacing-sm;
+    width: 100%;
+  }
+}
