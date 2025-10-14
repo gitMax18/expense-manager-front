@@ -1,12 +1,8 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  imports: [],
+  template: '',
 })
-export class App {
-  protected readonly title = signal('expense-manager-front');
-}
+export class App {}
