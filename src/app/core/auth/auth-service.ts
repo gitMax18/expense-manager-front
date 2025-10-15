@@ -49,6 +49,10 @@ export class AuthService {
     this.route.navigate(['/auth/login']);
   }
 
+  getToken(): string | null {
+    return localStorage.getItem(this.tokenStorageKey);
+  }
+
   private authSuccess(authResponse: AuthResponse) {
     if (authResponse.token) {
       this.setToken(authResponse.token);
@@ -63,10 +67,6 @@ export class AuthService {
 
   private setToken(token: string) {
     localStorage.setItem(this.tokenStorageKey, token);
-  }
-
-  private getToken(): string | null {
-    return localStorage.getItem(this.tokenStorageKey);
   }
 
   private clearToken() {
