@@ -1,19 +1,80 @@
-import { AuthRequest } from './types';
+import { AuthRequest, AuthResponse } from './types';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { catchError, tap, throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   http = inject(HttpClient);
+  route = inject(Router);
+
+  private readonly tokenStorageKey = 'expense-manager-token';
 
   login(authRequest: AuthRequest) {
-    return this.http.post(`${environment.apiUrl}/auth/login`, authRequest);
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, authRequest).pipe(
+      tap((response) => {
+        this.authSuccess(response);
+      }),
+      catchError((error) => {
+        return this.authError(error);
+      })
+    );
   }
 
   register(authRequest: AuthRequest) {
-    return this.http.post(`${environment.apiUrl}/auth/register`, authRequest);
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, authRequest).pipe(
+      tap((response) => {
+        this.authSuccess(response);
+      }),
+      catchError((error) => {
+        return this.authError(error);
+      })
+    );
+  }
+
+  isAuthenticated(): boolean {
+    const token = this.getToken();
+    if (!token) {
+      return false;
+    }
+    return !this.isTokenExpired(token);
+  }
+
+  logout() {
+    this.clearToken();
+    this.route.navigate(['/auth/login']);
+  }
+
+  private authSuccess(authResponse: AuthResponse) {
+    if (authResponse.token) {
+      this.setToken(authResponse.token);
+    }
+    this.route.navigate(['/']);
+  }
+
+  private authError(error: any) {
+    this.clearToken();
+    return throwError(() => error);
+  }
+
+  private setToken(token: string) {
+    localStorage.setItem(this.tokenStorageKey, token);
+  }
+
+  private getToken(): string | null {
+    return localStorage.getItem(this.tokenStorageKey);
+  }
+
+  private clearToken() {
+    localStorage.removeItem(this.tokenStorageKey);
+  }
+
+  private isTokenExpired(token: string): boolean {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return Date.now() >= payload.exp * 1000;
   }
 }

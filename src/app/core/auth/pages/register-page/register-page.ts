@@ -26,9 +26,6 @@ export class RegisterPage {
 
   handleSubmit(authData: AuthRequest) {
     this.authService.register(authData).subscribe({
-      next: (response) => {
-        console.log('Login successful', response);
-      },
       error: (error) => {
         console.error('Login failed', error);
       },

@@ -26,9 +26,6 @@ export class LoginPage {
 
   handleSubmit(authData: AuthRequest) {
     this.authService.login(authData).subscribe({
-      next: (response) => {
-        console.log('Login successful', response);
-      },
       error: (error) => {
         console.error('Login failed', error);
       },
