@@ -1,0 +1,22 @@
+@use "variables" as v;
+
+:host {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: v.$navbar-width;
+}
+
+::ng-deep {
+  .p-menu {
+    height: 100%;
+  }
+}
+
+.navbar {
+  &__logo {
+    text-align: center;
+    font-size: v.$font-size-xxl;
+  }
+}

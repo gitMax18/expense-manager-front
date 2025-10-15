@@ -1,0 +1,8 @@
+@use "variables" as v;
+
+.layout {
+  &__content {
+    margin-left: v.$navbar-width;
+    padding: v.$spacing-md;
+  }
+}
