@@ -25,7 +25,7 @@ import { InputTextModule } from 'primeng/inputtext';
           [control]="authForm.controls['password']"
         ></app-form-error>
       </app-form-item>
-      <p-button type="submit" label="submit"></p-button>
+      <p-button type="submit" label="submit" [disabled]="authForm.invalid"></p-button>
     </form>
   `,
   styleUrl: './auth-form.scss',
