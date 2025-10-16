@@ -1,0 +1,26 @@
+@use "variables" as v;
+
+.p-inputtext,
+textarea,
+.p-inputnumber,
+.p-button,
+.p-select {
+  width: 100%;
+}
+
+.group {
+  display: flex;
+  gap: v.$spacing-sm;
+
+  &__left {
+    flex-grow: 1;
+  }
+  &__right {
+    display: flex;
+    gap: v.$spacing-sm;
+  }
+}
+
+::ng-deep .p-button {
+  margin-top: v.$spacing-sm;
+}
