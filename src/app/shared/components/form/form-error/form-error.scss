@@ -1,0 +1,6 @@
+@use "variables" as v;
+
+.error {
+  color: v.$color-danger;
+  margin-top: v.$spacing-sm;
+}

@@ -1,0 +1,9 @@
+@use "variables" as v;
+.message {
+  &--success {
+    color: v.$color-success;
+  }
+  &--error {
+    color: v.$color-danger;
+  }
+}

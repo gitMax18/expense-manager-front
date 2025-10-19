@@ -1,4 +1,4 @@
-import { Component, output, signal } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormItem } from '../../../../shared/components/form/form-item/form-item';
 import { FormLabel } from '../../../../shared/components/form/form-label/form-label';
@@ -10,6 +10,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
 import { AccountType, CreateAccountRequest } from '../../types';
 import { SelectOption } from '../../../../shared/types';
+import { DisplayServerResponse } from '../../../../shared/components/display-server-response/display-server-response';
 
 @Component({
   selector: 'app-create-account-form',
@@ -26,13 +27,18 @@ import { SelectOption } from '../../../../shared/types';
     SelectModule,
     InputNumberModule,
     ButtonModule,
+    DisplayServerResponse,
   ],
   template: `
     <form [formGroup]="accountForm" (ngSubmit)="handleSubmit()">
       <app-form-item>
         <app-form-label for="name">Name</app-form-label>
         <input id="name" type="text" formControlName="name" pInputText />
-        <app-form-error fieldName="Name" [control]="accountForm.controls['name']" />
+        <app-form-error
+          [errorDetails]="serverErrorDetails()"
+          fieldName="Name"
+          [control]="accountForm.controls['name']"
+        />
       </app-form-item>
 
       <app-form-item>
@@ -51,7 +57,11 @@ import { SelectOption } from '../../../../shared/types';
               [min]="0"
               [useGrouping]="false"
             ></p-inputNumber>
-            <app-form-error fieldName="Balance" [control]="accountForm.controls['balance']" />
+            <app-form-error
+              [errorDetails]="serverErrorDetails()"
+              fieldName="Balance"
+              [control]="accountForm.controls['balance']"
+            />
           </app-form-item>
         </div>
         <div class="group__right">
@@ -64,7 +74,11 @@ import { SelectOption } from '../../../../shared/types';
               optionLabel="label"
               optionValue="value"
             ></p-select>
-            <app-form-error fieldName="Currency" [control]="accountForm.controls['currency']" />
+            <app-form-error
+              [errorDetails]="serverErrorDetails()"
+              fieldName="Currency"
+              [control]="accountForm.controls['currency']"
+            />
           </app-form-item>
           <app-form-item>
             <app-form-label for="type">Account type</app-form-label>
@@ -75,17 +89,35 @@ import { SelectOption } from '../../../../shared/types';
               optionLabel="label"
               optionValue="value"
             ></p-select>
-            <app-form-error fieldName="Account type" [control]="accountForm.controls['type']" />
+            <app-form-error
+              [errorDetails]="serverErrorDetails()"
+              fieldName="Type"
+              [control]="accountForm.controls['type']"
+            />
           </app-form-item>
         </div>
       </div>
-      <p-button type="submit" label="Create account" [disabled]="accountForm.invalid"></p-button>
+      <app-display-server-response [error]="serverError()" [message]="serverMessage()" />
+      <p-button
+        type="submit"
+        label="Create account"
+        [disabled]="accountForm.invalid || isLoading()"
+        [loading]="isLoading()"
+      ></p-button>
     </form>
   `,
   styleUrl: './create-account-form.scss',
 })
 export class CreateAccountForm {
   onSubmit = output<CreateAccountRequest>();
+  isLoading = input(false);
+  serverMessage = input<string | null>(null);
+  serverError = input<string | null>(null);
+  serverErrorDetails = input<Record<string, string> | null>(null);
+
+  ngOnChanges() {
+    console.log('server error :', this.serverError());
+  }
 
   readonly currencyOptions = signal<SelectOption<string>[]>([
     { label: 'Euro (EUR)', value: 'EUR' },

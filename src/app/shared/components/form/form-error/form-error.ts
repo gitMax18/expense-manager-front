@@ -15,6 +15,10 @@ import { FormControl } from '@angular/forms';
       <div>{{ fieldName() }} must be at least {{ minValueRequired() }}.</div>
       }
     </div>
+    } @if (errorDetails !== null && errorDetails()?.[fieldName().toLowerCase()]) {
+    <div class="error">
+      <div>{{ fieldName() + " " + errorDetails()?.[fieldName().toLowerCase()]}}</div>
+    </div>
     }
   `,
   styleUrl: './form-error.scss',
@@ -22,6 +26,7 @@ import { FormControl } from '@angular/forms';
 export class FormError {
   control = input.required<FormControl>();
   fieldName = input.required<string>();
+  errorDetails = input<Record<string, string> | null>();
 
   minLengthRequired = computed(() => {
     const minLengthError = this.control().errors?.['minlength'] as
