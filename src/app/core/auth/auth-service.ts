@@ -4,6 +4,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { catchError, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { SuccessResponse } from '../../shared/types';
 
 @Injectable({
   providedIn: 'root',
@@ -15,25 +16,29 @@ export class AuthService {
   private readonly tokenStorageKey = 'expense-manager-token';
 
   login(authRequest: AuthRequest) {
-    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, authRequest).pipe(
-      tap((response) => {
-        this.authSuccess(response);
-      }),
-      catchError((error) => {
-        return this.authError(error);
-      })
-    );
+    return this.http
+      .post<SuccessResponse<AuthResponse>>(`${environment.apiUrl}/auth/login`, authRequest)
+      .pipe(
+        tap((response) => {
+          this.authSuccess(response.data);
+        }),
+        catchError((error) => {
+          return this.authError(error);
+        })
+      );
   }
 
   register(authRequest: AuthRequest) {
-    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, authRequest).pipe(
-      tap((response) => {
-        this.authSuccess(response);
-      }),
-      catchError((error) => {
-        return this.authError(error);
-      })
-    );
+    return this.http
+      .post<SuccessResponse<AuthResponse>>(`${environment.apiUrl}/auth/register`, authRequest)
+      .pipe(
+        tap((response) => {
+          this.authSuccess(response.data);
+        }),
+        catchError((error) => {
+          return this.authError(error);
+        })
+      );
   }
 
   isAuthenticated(): boolean {

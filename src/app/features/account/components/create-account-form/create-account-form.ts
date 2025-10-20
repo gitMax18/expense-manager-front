@@ -11,6 +11,7 @@ import { ButtonModule } from 'primeng/button';
 import { AccountType, CreateAccountRequest } from '../../types';
 import { SelectOption } from '../../../../shared/types';
 import { DisplayServerResponse } from '../../../../shared/components/display-server-response/display-server-response';
+import { HttpState } from '../../../../shared/abstract/http-state/http-state';
 
 @Component({
   selector: 'app-create-account-form',
@@ -108,12 +109,8 @@ import { DisplayServerResponse } from '../../../../shared/components/display-ser
   `,
   styleUrl: './create-account-form.scss',
 })
-export class CreateAccountForm {
+export class CreateAccountForm extends HttpState {
   onSubmit = output<CreateAccountRequest>();
-  isLoading = input(false);
-  serverMessage = input<string | null>(null);
-  serverError = input<string | null>(null);
-  serverErrorDetails = input<Record<string, string> | null>(null);
 
   ngOnChanges() {
     console.log('server error :', this.serverError());

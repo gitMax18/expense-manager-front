@@ -1,4 +1,5 @@
-import { AuthRequest } from './../../types';
+import { HttpRequestStateService } from './../../../../shared/services/http-request-state.service';
+import { AuthRequest, AuthResponse } from './../../types';
 import { Component, inject } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { AuthForm } from '../../components/auth-form/auth-form';
@@ -12,7 +13,13 @@ import { RouterLink } from '@angular/router';
     <div class="container">
       <p-card>
         <ng-template #title>Login</ng-template>
-        <app-auth-form (onSubmit)="handleSubmit($event)"></app-auth-form>
+        <app-auth-form
+          [isLoading]="loginState.isLoading()"
+          [serverError]="loginState.error()"
+          [serverMessage]="loginState.message()"
+          [serverErrorDetails]="loginState.errorDetails()"
+          (onSubmit)="handleSubmit($event)"
+        ></app-auth-form>
         <ng-template #footer>
           <span>Don't have an account? <a routerLink="/auth/register">Register</a></span>
         </ng-template>
@@ -23,12 +30,11 @@ import { RouterLink } from '@angular/router';
 })
 export class LoginPage {
   authService = inject(AuthService);
+  HttpRequestStateService = inject(HttpRequestStateService);
+
+  readonly loginState = this.HttpRequestStateService.create<AuthResponse>();
 
   handleSubmit(authData: AuthRequest) {
-    this.authService.login(authData).subscribe({
-      error: (error) => {
-        console.error('Login failed', error);
-      },
-    });
+    this.loginState.execute(() => this.authService.login(authData)).subscribe();
   }
 }
