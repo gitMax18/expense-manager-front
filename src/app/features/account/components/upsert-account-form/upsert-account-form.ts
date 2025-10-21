@@ -1,4 +1,4 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, computed, effect, input, output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormItem } from '../../../../shared/components/form/form-item/form-item';
 import { FormLabel } from '../../../../shared/components/form/form-label/form-label';
@@ -8,16 +8,13 @@ import { TextareaModule } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
-import { AccountType, CreateAccountRequest } from '../../types';
+import { Account, AccountType, UpsertAccountRequest } from '../../types';
 import { SelectOption } from '../../../../shared/types';
 import { DisplayServerResponse } from '../../../../shared/components/display-server-response/display-server-response';
 import { HttpState } from '../../../../shared/abstract/http-state/http-state';
 
 @Component({
-  selector: 'app-create-account-form',
-  host: {
-    class: 'create-account-form',
-  },
+  selector: 'app-upsert-account-form',
   imports: [
     FormItem,
     FormLabel,
@@ -101,19 +98,34 @@ import { HttpState } from '../../../../shared/abstract/http-state/http-state';
       <app-display-server-response [error]="serverError()" [message]="serverMessage()" />
       <p-button
         type="submit"
-        label="Create account"
+        [label]="btnLabel()"
         [disabled]="accountForm.invalid || isLoading()"
         [loading]="isLoading()"
       ></p-button>
     </form>
   `,
-  styleUrl: './create-account-form.scss',
+  styleUrl: './upsert-account-form.scss',
 })
-export class CreateAccountForm extends HttpState {
-  onSubmit = output<CreateAccountRequest>();
+export class UpsertAccountForm extends HttpState {
+  account = input<Account | null>(null);
+  onSubmit = output<UpsertAccountRequest>();
+  isUpdate = computed(() => this.account() != null);
+  btnLabel = computed(() => (this.isUpdate() ? 'Update account' : 'Create account'));
 
-  ngOnChanges() {
-    console.log('server error :', this.serverError());
+  constructor() {
+    super();
+    console.log('CreateAccountForm initialized with account :', this.account());
+    effect(() => {
+      if (this.account()) {
+        this.accountForm.patchValue({
+          name: this.account()!.name,
+          description: this.account()!.description || '',
+          balance: this.account()!.balance,
+          currency: this.account()!.currency,
+          type: this.account()!.type,
+        });
+      }
+    });
   }
 
   readonly currencyOptions = signal<SelectOption<string>[]>([
@@ -151,6 +163,6 @@ export class CreateAccountForm extends HttpState {
       return;
     }
 
-    this.onSubmit.emit(this.accountForm.value as CreateAccountRequest);
+    this.onSubmit.emit(this.accountForm.value as UpsertAccountRequest);
   }
 }

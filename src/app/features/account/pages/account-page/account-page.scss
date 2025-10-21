@@ -1,0 +1,9 @@
+@use "variables" as v;
+
+.account-page {
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: v.$spacing-md;
+  }
+}
