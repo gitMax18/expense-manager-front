@@ -3,6 +3,7 @@ import { Account, UpsertAccountRequest } from '../../types';
 import { AccountService } from '../../account-service';
 import { HttpRequestStateService } from '../../../../shared/services/http-request-state.service';
 import { UpsertAccountForm } from '../../components/upsert-account-form/upsert-account-form';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upsert-account-page',
@@ -26,9 +27,11 @@ import { UpsertAccountForm } from '../../components/upsert-account-form/upsert-a
   styleUrl: './upsert-account-page.scss',
 })
 export class UpsertAccountPage {
-  account = input<Account | null>(null);
   accountService = inject(AccountService);
   httpRequestStateService = inject(HttpRequestStateService);
+  route = inject(Router);
+
+  account = input<Account | null>(null);
   title = computed(() => (this.account() ? 'Update Account' : 'Create new Account'));
 
   isLoading = computed(
@@ -51,11 +54,11 @@ export class UpsertAccountPage {
     if (this.account()) {
       this.updateAccountState
         .execute(() => this.accountService.updateAccount(this.account()!.id, upsertAccountRequest))
-        .subscribe();
+        .subscribe(() => this.route.navigate(['/accounts']));
     } else {
       this.createAccountState
         .execute(() => this.accountService.createAccount(upsertAccountRequest))
-        .subscribe();
+        .subscribe(() => this.route.navigate(['/accounts']));
     }
   }
 }
