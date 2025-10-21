@@ -1,0 +1,47 @@
+@use "variables" as v;
+
+.display-account {
+  width: 100%;
+
+  .p-card {
+    width: 100%;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: v.$spacing-sm;
+  }
+
+  &__description {
+    margin: 0;
+    color: var(--p-text-color-secondary);
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    gap: v.$spacing-sm;
+    align-items: flex-start;
+  }
+
+  &__label {
+    font-weight: 600;
+  }
+
+  &__value {
+    text-align: right;
+    word-break: break-word;
+  }
+
+  &__actions {
+    margin-top: v.$spacing-md;
+    display: flex;
+    gap: v.$spacing-sm;
+    justify-content: flex-end;
+
+    .p-button {
+      min-width: 8rem;
+    }
+  }
+}
