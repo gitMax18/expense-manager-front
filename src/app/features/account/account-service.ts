@@ -1,7 +1,7 @@
 import { SuccessResponse } from './../../shared/types';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Account, CreateAccountRequest } from './types';
+import { Account, UpsertAccountRequest } from './types';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -10,7 +10,22 @@ import { environment } from '../../../environments/environment';
 export class AccountService {
   http = inject(HttpClient);
 
-  createAccount(request: CreateAccountRequest) {
+  createAccount(request: UpsertAccountRequest) {
     return this.http.post<SuccessResponse<Account>>(`${environment.apiUrl}/accounts`, request);
+  }
+
+  updateAccount(accountId: string, request: UpsertAccountRequest) {
+    return this.http.put<SuccessResponse<Account>>(
+      `${environment.apiUrl}/accounts/${accountId}`,
+      request
+    );
+  }
+
+  getUserAccounts() {
+    return this.http.get<SuccessResponse<Account[]>>(`${environment.apiUrl}/accounts`);
+  }
+
+  getAccountById(id: string) {
+    return this.http.get<SuccessResponse<Account>>(`${environment.apiUrl}/accounts/${id}`);
   }
 }

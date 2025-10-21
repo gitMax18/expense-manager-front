@@ -10,7 +10,7 @@ export type Account = {
   updatedAt: string;
 };
 
-export type CreateAccountRequest = Omit<Account, 'id' | 'archived' | 'createdAt' | 'updatedAt'>;
+export type UpsertAccountRequest = Omit<Account, 'id' | 'archived' | 'createdAt' | 'updatedAt'>;
 
 export enum AccountType {
   CHECKING = 'CHECKING',

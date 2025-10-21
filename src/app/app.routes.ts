@@ -4,8 +4,8 @@ import { RegisterPage } from './core/auth/pages/register-page/register-page';
 import { MainLayout } from './shared/layout/main-layout/main-layout';
 import { AccountPage } from './features/account/pages/account-page/account-page';
 import { authGuard } from './core/auth/guards/auth.guard';
-import { CreateAccountPage } from './features/account/pages/create-account-page/create-account-page';
-
+import { UpsertAccountPage } from './features/account/pages/upsert-account-page/upsert-account-page';
+import { accountResolver } from './features/account/resolvers';
 export const routes: Routes = [
   {
     path: 'auth/login',
@@ -26,7 +26,14 @@ export const routes: Routes = [
       },
       {
         path: 'accounts/create',
-        component: CreateAccountPage,
+        component: UpsertAccountPage,
+      },
+      {
+        path: 'accounts/:id/update',
+        component: UpsertAccountPage,
+        resolve: {
+          account: accountResolver,
+        },
       },
     ],
   },
