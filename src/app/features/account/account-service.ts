@@ -28,4 +28,8 @@ export class AccountService {
   getAccountById(id: string) {
     return this.http.get<SuccessResponse<Account>>(`${environment.apiUrl}/accounts/${id}`);
   }
+
+  deleteAccountById(id: string) {
+    return this.http.delete<SuccessResponse<null>>(`${environment.apiUrl}/accounts/${id}`);
+  }
 }

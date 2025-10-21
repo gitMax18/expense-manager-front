@@ -23,6 +23,7 @@ import { DisplayAccount } from '../../components/display-account/display-account
           (onDelete)="handleDeleteAccount($event)"
           (onUpdate)="handleUpdateAccount($event)"
           [account]="account"
+          [isDeleteLoading]="deleteAccountState.isLoading()"
         />
         }
       </div>
@@ -36,6 +37,7 @@ export class AccountPage {
   accountService = inject(AccountService);
 
   getUserAccountsState = this.httpRequestStateService.create<Account[]>();
+  deleteAccountState = this.httpRequestStateService.create<null>();
 
   ngOnInit() {
     this.getUserAccountsState.execute(() => this.accountService.getUserAccounts()).subscribe();
@@ -50,6 +52,8 @@ export class AccountPage {
   }
 
   handleDeleteAccount(accountId: string) {
-    // Implement delete logic here
+    this.deleteAccountState
+      .execute(() => this.accountService.deleteAccountById(accountId))
+      .subscribe();
   }
 }

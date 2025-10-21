@@ -54,7 +54,13 @@ import { Account } from '../../types';
           severity="secondary"
           (onClick)="handleUpdate()"
         />
-        <p-button label="Delete" icon="pi pi-trash" severity="danger" (onClick)="handleDelete()" />
+        <p-button
+          label="Delete"
+          [loading]="isDeleteLoading()"
+          icon="pi pi-trash"
+          severity="danger"
+          (onClick)="handleDelete()"
+        />
       </div>
     </p-card>
   `,
@@ -62,6 +68,7 @@ import { Account } from '../../types';
 })
 export class DisplayAccount {
   account = input.required<Account>();
+  isDeleteLoading = input(false);
   onUpdate = output<Account>();
   onDelete = output<string>();
 
