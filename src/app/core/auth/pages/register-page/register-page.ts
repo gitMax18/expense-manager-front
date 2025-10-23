@@ -1,10 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { Card } from 'primeng/card';
 import { AuthForm } from '../../components/auth-form/auth-form';
-import { AuthService } from '../../auth-service';
-import { AuthRequest, AuthResponse } from '../../types';
+import { AuthRequest } from '../../types';
 import { RouterLink } from '@angular/router';
-import { HttpRequestStateService } from '../../../../shared/services/http-request-state.service';
+import { UserStore } from '../../user-store';
 
 @Component({
   selector: 'app-register-page',
@@ -14,10 +13,10 @@ import { HttpRequestStateService } from '../../../../shared/services/http-reques
       <p-card>
         <ng-template #title>Register</ng-template>
         <app-auth-form
-          [isLoading]="registerState.isLoading()"
-          [serverError]="registerState.error()"
-          [serverMessage]="registerState.message()"
-          [serverErrorDetails]="registerState.errorDetails()"
+          [isLoading]="userStore.isLoading()"
+          [serverError]="userStore.error()"
+          [serverMessage]="userStore.message()"
+          [serverErrorDetails]="userStore.errorDetails()"
           (onSubmit)="handleSubmit($event)"
         ></app-auth-form>
         <ng-template #footer>
@@ -29,12 +28,9 @@ import { HttpRequestStateService } from '../../../../shared/services/http-reques
   styleUrl: './register-page.scss',
 })
 export class RegisterPage {
-  authService = inject(AuthService);
-  httpRequestStateService = inject(HttpRequestStateService);
-
-  readonly registerState = this.httpRequestStateService.create<AuthResponse>();
+  userStore = inject(UserStore);
 
   handleSubmit(authData: AuthRequest) {
-    this.registerState.execute(() => this.authService.register(authData)).subscribe();
+    this.userStore.register(authData);
   }
 }

@@ -1,4 +1,4 @@
-import { AuthRequest, AuthResponse } from './types';
+import { AuthRequest, User } from './types';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -17,7 +17,7 @@ export class AuthService {
 
   login(authRequest: AuthRequest) {
     return this.http
-      .post<SuccessResponse<AuthResponse>>(`${environment.apiUrl}/auth/login`, authRequest)
+      .post<SuccessResponse<User>>(`${environment.apiUrl}/auth/login`, authRequest)
       .pipe(
         tap((response) => {
           this.authSuccess(response.data);
@@ -30,7 +30,7 @@ export class AuthService {
 
   register(authRequest: AuthRequest) {
     return this.http
-      .post<SuccessResponse<AuthResponse>>(`${environment.apiUrl}/auth/register`, authRequest)
+      .post<SuccessResponse<User>>(`${environment.apiUrl}/auth/register`, authRequest)
       .pipe(
         tap((response) => {
           this.authSuccess(response.data);
@@ -58,7 +58,7 @@ export class AuthService {
     return localStorage.getItem(this.tokenStorageKey);
   }
 
-  private authSuccess(authResponse: AuthResponse) {
+  private authSuccess(authResponse: User) {
     if (authResponse.token) {
       this.setToken(authResponse.token);
     }

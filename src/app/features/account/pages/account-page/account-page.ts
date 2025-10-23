@@ -1,10 +1,10 @@
 import { Account } from './../../types';
 import { AccountService } from './../../account-service';
-import { HttpRequestStateService } from './../../../../shared/services/http-request-state.service';
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DisplayAccount } from '../../components/display-account/display-account';
+import { accountStore } from '../../account-store';
 
 @Component({
   selector: 'app-account-page',
@@ -18,12 +18,12 @@ import { DisplayAccount } from '../../components/display-account/display-account
         severity="success"
       />
       <div class="account-page__list">
-        @for (account of getUserAccountsState.data(); track account.id) {
+        @for (account of accountStore.entities(); track account.id) {
         <app-display-account
           (onDelete)="handleDeleteAccount($event)"
           (onUpdate)="handleUpdateAccount($event)"
           [account]="account"
-          [isDeleteLoading]="deleteAccountState.isLoading()"
+          [isDeleteLoading]="accountStore.isLoading()"
         />
         }
       </div>
@@ -33,27 +33,19 @@ import { DisplayAccount } from '../../components/display-account/display-account
 })
 export class AccountPage {
   router = inject(Router);
-  httpRequestStateService = inject(HttpRequestStateService);
+  accountStore = inject(accountStore);
   accountService = inject(AccountService);
-
-  getUserAccountsState = this.httpRequestStateService.create<Account[]>();
-  deleteAccountState = this.httpRequestStateService.create<null>();
-
-  ngOnInit() {
-    this.getUserAccountsState.execute(() => this.accountService.getUserAccounts()).subscribe();
-  }
 
   handleClickCreateAccount() {
     this.router.navigate(['/accounts/create']);
   }
 
   handleUpdateAccount(account: Account) {
+    this.accountStore.setSelectedId(account.id);
     this.router.navigate([`/accounts/${account.id}/update`]);
   }
 
   handleDeleteAccount(accountId: string) {
-    this.deleteAccountState
-      .execute(() => this.accountService.deleteAccountById(accountId))
-      .subscribe();
+    this.accountStore.removeAccount(accountId);
   }
 }

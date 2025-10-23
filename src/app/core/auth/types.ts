@@ -3,7 +3,7 @@ export type AuthRequest = {
   password: string;
 };
 
-export type AuthResponse = {
+export type User = {
   email: string;
   role: string;
   token: string;

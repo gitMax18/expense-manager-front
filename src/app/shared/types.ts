@@ -6,16 +6,11 @@ export type SelectOption<TValue> = {
   value: TValue;
 };
 
-export type HttpRequestState<TResponse> = {
-  isLoading: Signal<boolean>;
-  error: Signal<string | null>;
-  data: Signal<TResponse | null>;
-  message: Signal<string | null>;
-  errorDetails: Signal<Record<string, string> | null>;
-  execute: (
-    requestFactory: () => Observable<SuccessResponse<TResponse>>
-  ) => Observable<SuccessResponse<TResponse>>;
-  reset: () => void;
+export type HttpRequestStatus = {
+  isLoading: boolean;
+  message: string | null;
+  error: string | null;
+  errorDetails: Record<string, string> | null;
 };
 
 export type SuccessResponse<T> = {

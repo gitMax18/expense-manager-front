@@ -1,10 +1,9 @@
-import { HttpRequestStateService } from './../../../../shared/services/http-request-state.service';
-import { AuthRequest, AuthResponse } from './../../types';
+import { AuthRequest } from './../../types';
 import { Component, inject } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { AuthForm } from '../../components/auth-form/auth-form';
-import { AuthService } from '../../auth-service';
 import { RouterLink } from '@angular/router';
+import { UserStore } from '../../user-store';
 
 @Component({
   selector: 'app-login-page',
@@ -14,10 +13,10 @@ import { RouterLink } from '@angular/router';
       <p-card>
         <ng-template #title>Login</ng-template>
         <app-auth-form
-          [isLoading]="loginState.isLoading()"
-          [serverError]="loginState.error()"
-          [serverMessage]="loginState.message()"
-          [serverErrorDetails]="loginState.errorDetails()"
+          [isLoading]="userStore.isLoading()"
+          [serverError]="userStore.error()"
+          [serverMessage]="userStore.message()"
+          [serverErrorDetails]="userStore.errorDetails()"
           (onSubmit)="handleSubmit($event)"
         ></app-auth-form>
         <ng-template #footer>
@@ -29,12 +28,9 @@ import { RouterLink } from '@angular/router';
   styleUrl: './login-page.scss',
 })
 export class LoginPage {
-  authService = inject(AuthService);
-  HttpRequestStateService = inject(HttpRequestStateService);
-
-  readonly loginState = this.HttpRequestStateService.create<AuthResponse>();
+  userStore = inject(UserStore);
 
   handleSubmit(authData: AuthRequest) {
-    this.loginState.execute(() => this.authService.login(authData)).subscribe();
+    this.userStore.login(authData);
   }
 }
