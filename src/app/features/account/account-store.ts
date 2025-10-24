@@ -19,7 +19,7 @@ import { catchError, finalize, pipe, switchMap, tap, throwError } from 'rxjs';
 import { withRequestStatus } from '../../shared/ngrx/withRequestStatus';
 import { computed, inject } from '@angular/core';
 import { AccountService } from './account-service';
-import { ErrorResponse } from '../../shared/types';
+import { HttpErrorResponse } from '@angular/common/http';
 
 type AccountState = {
   selectedId: number | null;
@@ -56,8 +56,8 @@ export const accountStore = signalStore(
               store.setMessage(response.message);
               patchState(store, addEntity(response.data));
             }),
-            catchError((error: ErrorResponse) => {
-              store.setError(error.error, error.details);
+            catchError((error: HttpErrorResponse) => {
+              store.setError(error.error.error, error.error.details);
               return throwError(() => error);
             }),
             finalize(() => store.stopLoading())
@@ -76,8 +76,8 @@ export const accountStore = signalStore(
               store.setMessage(response.message);
               patchState(store, removeEntity(id));
             }),
-            catchError((error: ErrorResponse) => {
-              store.setError(error.error, error.details);
+            catchError((error: HttpErrorResponse) => {
+              store.setError(error.error.error, error.error.details);
               return throwError(() => error);
             }),
             finalize(() => store.stopLoading())
@@ -96,8 +96,8 @@ export const accountStore = signalStore(
               store.setMessage(response.message);
               patchState(store, setEntity(response.data));
             }),
-            catchError((error: ErrorResponse) => {
-              store.setError(error.error, error.details);
+            catchError((error: HttpErrorResponse) => {
+              store.setError(error.error.error, error.error.details);
               return throwError(() => error);
             }),
             finalize(() => store.stopLoading())
@@ -116,8 +116,8 @@ export const accountStore = signalStore(
               store.setMessage(response.message);
               patchState(store, setEntities(response.data));
             }),
-            catchError((error: ErrorResponse) => {
-              store.setError(error.error, error.details);
+            catchError((error: HttpErrorResponse) => {
+              store.setError(error.error.error, error.error.details);
               return throwError(() => error);
             }),
             finalize(() => {

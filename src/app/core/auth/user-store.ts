@@ -31,7 +31,7 @@ export const UserStore = signalStore(
               patchState(store, { user: response.data.user });
             }),
             catchError((error) => {
-              store.setError(error.error, error.details);
+              store.setError(error.error.error, error.error.details);
               return throwError(() => error);
             }),
             finalize(() => store.stopLoading())
@@ -52,7 +52,7 @@ export const UserStore = signalStore(
               patchState(store, { user: response.data.user });
             }),
             catchError((error) => {
-              store.setError(error.error, error.details);
+              store.setError(error.error.error, error.error.details);
               return throwError(() => error);
             }),
             finalize(() => store.stopLoading())
