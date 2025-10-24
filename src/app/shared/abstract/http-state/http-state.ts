@@ -5,6 +5,7 @@ import { Component, input } from '@angular/core';
   template: ``,
 })
 export abstract class HttpState {
+  isSuccess = input<false>;
   isLoading = input(false);
   serverMessage = input<string | null>(null);
   serverError = input<string | null>(null);

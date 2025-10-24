@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, effect, inject, input } from '@angular/core';
 import { Account, UpsertAccountRequest } from '../../types';
 import { UpsertAccountForm } from '../../components/upsert-account-form/upsert-account-form';
 import { Router } from '@angular/router';
@@ -31,6 +31,14 @@ export class UpsertAccountPage {
 
   account = input<Account | null>(null);
   title = computed(() => (this.account() ? 'Update Account' : 'Create new Account'));
+
+  constructor() {
+    effect(() => {
+      if (this.accountStore.isSuccess()) {
+        this.route.navigate(['/accounts']);
+      }
+    });
+  }
 
   ngOnInit() {
     this.accountStore.resetStatus();

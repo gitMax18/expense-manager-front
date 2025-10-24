@@ -10,6 +10,7 @@ import { HttpRequestStatus } from '../types';
 export function withRequestStatus() {
   return signalStoreFeature(
     withState<HttpRequestStatus>({
+      isSuccess: undefined,
       isLoading: false,
       error: null,
       message: null,
@@ -25,15 +26,20 @@ export function withRequestStatus() {
       },
 
       setError(error: string, details?: Record<string, string> | null) {
-        patchState(store, { isLoading: false, error, errorDetails: details });
+        patchState(store, { isSuccess: false, isLoading: false, error, errorDetails: details });
       },
 
       setMessage(message: string) {
-        patchState(store, { message });
+        patchState(store, { isSuccess: true, message });
+      },
+
+      setSuccess(success: boolean) {
+        patchState(store, { isSuccess: success });
       },
 
       resetStatus() {
         patchState(store, {
+          isSuccess: undefined,
           isLoading: false,
           error: null,
           message: null,

@@ -1,12 +1,10 @@
-import { Signal } from '@angular/core';
-import { Observable } from 'rxjs';
-
 export type SelectOption<TValue> = {
   label: string;
   value: TValue;
 };
 
 export type HttpRequestStatus = {
+  isSuccess: boolean | undefined;
   isLoading: boolean;
   message: string | null;
   error: string | null;
