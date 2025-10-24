@@ -108,6 +108,7 @@ export const accountStore = signalStore(
         switchMap(() => {
           return accountService.getUserAccounts().pipe(
             tap((response) => {
+              store.setMessage(response.message);
               patchState(store, setEntities(response.data));
             }),
             catchError((error: ErrorResponse) => {

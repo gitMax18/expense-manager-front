@@ -28,7 +28,7 @@ export const UserStore = signalStore(
           return authService.login(credentials).pipe(
             tap((response) => {
               store.setMessage(response.message);
-              patchState(store, { user: response.data });
+              patchState(store, { user: response.data.user });
             }),
             catchError((error) => {
               store.setError(error.error, error.details);
@@ -49,7 +49,7 @@ export const UserStore = signalStore(
           return authService.register(credentials).pipe(
             tap((response) => {
               store.setMessage(response.message);
-              patchState(store, { user: response.data });
+              patchState(store, { user: response.data.user });
             }),
             catchError((error) => {
               store.setError(error.error, error.details);

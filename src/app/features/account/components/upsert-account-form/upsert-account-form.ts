@@ -114,7 +114,6 @@ export class UpsertAccountForm extends HttpState {
 
   constructor() {
     super();
-    console.log('CreateAccountForm initialized with account :', this.account());
     effect(() => {
       if (this.account()) {
         this.accountForm.patchValue({
