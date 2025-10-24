@@ -14,7 +14,7 @@ export class AccountService {
     return this.http.post<SuccessResponse<Account>>(`${environment.apiUrl}/accounts`, request);
   }
 
-  updateAccount(accountId: string, request: UpsertAccountRequest) {
+  updateAccount(accountId: number, request: UpsertAccountRequest) {
     return this.http.put<SuccessResponse<Account>>(
       `${environment.apiUrl}/accounts/${accountId}`,
       request
@@ -25,11 +25,11 @@ export class AccountService {
     return this.http.get<SuccessResponse<Account[]>>(`${environment.apiUrl}/accounts`);
   }
 
-  getAccountById(id: string) {
+  getAccountById(id: number) {
     return this.http.get<SuccessResponse<Account>>(`${environment.apiUrl}/accounts/${id}`);
   }
 
-  deleteAccountById(id: string) {
+  deleteAccountById(id: number) {
     return this.http.delete<SuccessResponse<null>>(`${environment.apiUrl}/accounts/${id}`);
   }
 }

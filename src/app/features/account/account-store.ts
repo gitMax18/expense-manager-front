@@ -17,12 +17,12 @@ import { Account, UpsertAccountRequest } from './types';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, finalize, pipe, switchMap, tap, throwError } from 'rxjs';
 import { withRequestStatus } from '../../shared/ngrx/withRequestStatus';
-import { computed, inject, signal } from '@angular/core';
+import { computed, inject } from '@angular/core';
 import { AccountService } from './account-service';
 import { ErrorResponse } from '../../shared/types';
 
 type AccountState = {
-  selectedId: string | null;
+  selectedId: number | null;
 };
 
 export const accountStore = signalStore(
@@ -32,12 +32,17 @@ export const accountStore = signalStore(
   withEntities<Account>(),
   withComputed((store) => ({
     accountCount: computed(() => store.entities().length),
-    selectedAccount: signal(
-      store.entities().filter((account) => account.id === store.selectedId())
-    ),
+    selectedAccount: computed(() => {
+      const selectedId = store.selectedId();
+      if (selectedId === null) {
+        return null;
+      }
+
+      return store.entities().find((account) => account.id === selectedId) ?? null;
+    }),
   })),
   withMethods((store, accountService = inject(AccountService)) => ({
-    setSelectedId: (id: string) => {
+    setSelectedId: (id: number) => {
       patchState(store, { selectedId: id });
     },
     addAccount: rxMethod<UpsertAccountRequest>(
@@ -60,7 +65,7 @@ export const accountStore = signalStore(
         })
       )
     ),
-    removeAccount: rxMethod<string>(
+    removeAccount: rxMethod<number>(
       pipe(
         tap(() => {
           store.startLoading();

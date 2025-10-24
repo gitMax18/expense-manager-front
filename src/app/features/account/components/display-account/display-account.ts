@@ -70,7 +70,7 @@ export class DisplayAccount {
   account = input.required<Account>();
   isDeleteLoading = input(false);
   onUpdate = output<Account>();
-  onDelete = output<string>();
+  onDelete = output<number>();
 
   handleUpdate() {
     this.onUpdate.emit(this.account());

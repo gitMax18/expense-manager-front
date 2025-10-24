@@ -49,7 +49,7 @@ export class AccountPage {
     this.router.navigate([`/accounts/${account.id}/update`]);
   }
 
-  handleDeleteAccount(accountId: string) {
+  handleDeleteAccount(accountId: number) {
     this.accountStore.removeAccount(accountId);
   }
 }

@@ -9,7 +9,7 @@ export type AuthResponse = {
 };
 
 export type User = {
-  id: string;
+  id: number;
   email: string;
   role: string;
 };
