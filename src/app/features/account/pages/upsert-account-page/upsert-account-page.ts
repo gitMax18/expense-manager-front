@@ -32,6 +32,10 @@ export class UpsertAccountPage {
   account = input<Account | null>(null);
   title = computed(() => (this.account() ? 'Update Account' : 'Create new Account'));
 
+  ngOnInit() {
+    this.accountStore.resetStatus();
+  }
+
   handleSubmit(upsertAccountRequest: UpsertAccountRequest) {
     if (this.account()) {
       this.accountStore.updateAccount(upsertAccountRequest);

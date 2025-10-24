@@ -36,6 +36,10 @@ export class AccountPage {
   accountStore = inject(accountStore);
   accountService = inject(AccountService);
 
+  ngOnInit() {
+    this.accountStore.resetStatus();
+  }
+
   handleClickCreateAccount() {
     this.router.navigate(['/accounts/create']);
   }
