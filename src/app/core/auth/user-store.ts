@@ -20,7 +20,6 @@ export const UserStore = signalStore(
     login: rxMethod<AuthRequest>(
       pipe(
         tap(() => {
-          console.log('hello login');
           store.resetStatus();
           store.startLoading();
         }),

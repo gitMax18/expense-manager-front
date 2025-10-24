@@ -15,8 +15,4 @@ import { Component, input } from '@angular/core';
 export class DisplayServerResponse {
   error = input<string | null>();
   message = input<string | null>();
-
-  ngOnChanges() {
-    console.log('error ', this.error());
-  }
 }
