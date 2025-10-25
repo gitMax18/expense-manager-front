@@ -30,6 +30,10 @@ import { UserStore } from '../../user-store';
 export class RegisterPage {
   userStore = inject(UserStore);
 
+  ngOnInit() {
+    this.userStore.resetStatus();
+  }
+
   handleSubmit(authData: AuthRequest) {
     this.userStore.register(authData);
   }
