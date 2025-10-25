@@ -22,3 +22,8 @@ export type ErrorResponse = {
   error: string;
   details: Record<string, string>;
 };
+
+export type BaseEntity = {
+  createdAt: Date;
+  updatedAt: Date;
+};

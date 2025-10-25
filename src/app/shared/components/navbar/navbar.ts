@@ -34,7 +34,11 @@ import { AuthService } from '../../../core/auth/auth-service';
 })
 export class Navbar {
   authService = inject(AuthService);
-  items: MenuItem[] = [{ label: 'Accounts', icon: 'pi pi-fw pi-home', routerLink: '/accounts' }];
+
+  items: MenuItem[] = [
+    { label: 'Accounts', icon: 'pi pi-fw pi-home', routerLink: '/accounts' },
+    { label: 'Categories', icon: 'pi pi-fw pi-home', routerLink: '/category' },
+  ];
 
   handleLogout() {
     this.authService.logout();
