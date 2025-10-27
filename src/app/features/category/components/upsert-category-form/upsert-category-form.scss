@@ -1,0 +1,11 @@
+@use "variables" as v;
+
+.p-inputtext,
+.p-textarea,
+.p-button {
+  width: 100%;
+}
+
+.p-button {
+  margin-top: v.$spacing-sm;
+}

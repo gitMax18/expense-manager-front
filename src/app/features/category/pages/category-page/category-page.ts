@@ -1,11 +1,13 @@
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
 import { categoryStore } from '../../category-store';
 import { DisplayCategories } from '../../components/display-categories/display-categories';
 import { Category } from '../../types';
 
 @Component({
   selector: 'app-category-page',
-  imports: [DisplayCategories],
+  imports: [DisplayCategories, ButtonModule],
   template: `
     <section class="category-page">
       <header class="category-page__header">
@@ -16,6 +18,14 @@ import { Category } from '../../types';
               categoryStore.categoryCount() > 1 ? 's' : ''
             }}
           </p>
+        </div>
+        <div class="category-page__actions">
+          <p-button
+            label="Créer une catégorie"
+            icon="pi pi-plus"
+            severity="success"
+            (onClick)="handleCreateCategory()"
+          />
         </div>
       </header>
 
@@ -31,13 +41,19 @@ import { Category } from '../../types';
 })
 export class CategoryPage {
   categoryStore = inject(categoryStore);
+  private router = inject(Router);
 
   ngOnInit() {
+    this.categoryStore.resetStatus();
     this.categoryStore.getUserCategories();
   }
 
+  handleCreateCategory() {
+    this.router.navigate(['/category/create']);
+  }
+
   handleUpdateCategory(category: Category) {
-    this.categoryStore.setSelectedId(category.id);
+    this.router.navigate([`/category/${category.id}/update`]);
   }
 
   handleDeleteCategory(categoryId: number) {
