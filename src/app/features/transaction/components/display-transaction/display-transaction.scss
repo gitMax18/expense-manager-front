@@ -1,0 +1,59 @@
+@use "variables" as v;
+
+.display-transaction {
+  &__card {
+    cursor: pointer;
+  }
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__chips {
+    font-size: v.$font-size-sm;
+    padding: v.$spacing-sm;
+    &--out {
+      background-color: v.$color-danger;
+    }
+    &--in {
+      background-color: v.$color-success;
+    }
+  }
+
+  &__label {
+    font-weight: 600;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: v.$spacing-sm;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    gap: v.$spacing-sm;
+  }
+
+  &__value {
+    font-weight: 500;
+  }
+
+  &__meta {
+    color: var(--p-text-color-secondary);
+  }
+
+  &__notes {
+    margin: 0;
+    color: var(--p-text-color-secondary);
+  }
+
+  &__actions {
+    margin-top: v.$spacing-md;
+    display: flex;
+    gap: v.$spacing-sm;
+    justify-content: flex-end;
+  }
+}

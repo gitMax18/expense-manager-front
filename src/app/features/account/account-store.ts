@@ -45,6 +45,9 @@ export const accountStore = signalStore(
     setSelectedId: (id: number) => {
       patchState(store, { selectedId: id });
     },
+    modifyAccount: (account: Account) => {
+      patchState(store, setEntity(account));
+    },
     addAccount: rxMethod<UpsertAccountRequest>(
       pipe(
         tap(() => {

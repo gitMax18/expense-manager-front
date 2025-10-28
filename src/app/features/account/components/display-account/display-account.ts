@@ -11,7 +11,7 @@ import { Account } from '../../types';
   },
   imports: [CardModule, CurrencyPipe, ButtonModule],
   template: `
-    <p-card>
+    <p-card (click)="handleClickAccount()">
       <ng-template #title>
         {{ account().name }}
       </ng-template>
@@ -52,14 +52,14 @@ import { Account } from '../../types';
           label="Update"
           icon="pi pi-pencil"
           severity="secondary"
-          (onClick)="handleUpdate()"
+          (onClick)="handleUpdate($event)"
         />
         <p-button
           label="Delete"
           [loading]="isDeleteLoading()"
           icon="pi pi-trash"
           severity="danger"
-          (onClick)="handleDelete()"
+          (onClick)="handleDelete($event)"
         />
       </div>
     </p-card>
@@ -71,12 +71,19 @@ export class DisplayAccount {
   isDeleteLoading = input(false);
   onUpdate = output<Account>();
   onDelete = output<number>();
+  onViewTransactions = output<number>();
 
-  handleUpdate() {
+  handleUpdate(event?: MouseEvent) {
+    event?.stopPropagation();
     this.onUpdate.emit(this.account());
   }
 
-  handleDelete() {
+  handleDelete(event?: MouseEvent) {
+    event?.stopPropagation();
     this.onDelete.emit(this.account().id);
+  }
+
+  handleClickAccount() {
+    this.onViewTransactions.emit(this.account().id);
   }
 }

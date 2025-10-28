@@ -1,0 +1,52 @@
+@use "variables" as v;
+
+.transaction-page {
+  display: flex;
+  flex-direction: column;
+  gap: v.$spacing-lg;
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: v.$spacing-md;
+  }
+
+  &__title {
+    margin: 0;
+  }
+
+  &__account {
+    margin: v.$spacing-md 0;
+    color: var(--p-text-color-secondary);
+  }
+
+  &__meta {
+    color: var(--p-text-color-secondary);
+    font-size: 0.9rem;
+  }
+
+  &__form {
+    padding: v.$spacing-md;
+    background-color: var(--p-surface-900);
+    display: flex;
+    flex-direction: column;
+    gap: v.$spacing-sm;
+  }
+
+  &__form-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: v.$spacing-sm;
+  }
+
+  &__empty {
+    margin: 0;
+    text-align: center;
+    color: var(--p-text-color-secondary);
+  }
+}

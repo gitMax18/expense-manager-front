@@ -1,0 +1,25 @@
+@use "variables" as v;
+
+.upsert-transaction-form {
+  display: flex;
+  flex-direction: column;
+  gap: v.$spacing-md;
+
+  &__grid {
+    display: grid;
+    gap: v.$spacing-md;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
+.p-inputtext,
+.p-inputnumber,
+.p-select,
+.p-textarea,
+.p-button {
+  width: 100%;
+}
+
+.p-button {
+  margin-top: v.$spacing-sm;
+}

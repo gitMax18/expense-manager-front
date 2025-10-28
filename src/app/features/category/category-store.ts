@@ -1,11 +1,4 @@
-import {
-  patchState,
-  signalStore,
-  withComputed,
-  withHooks,
-  withMethods,
-  withState,
-} from '@ngrx/signals';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import {
   addEntity,
   removeEntity,
@@ -23,12 +16,14 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 type CategoryState = {
   selectedId: number | null;
+  isLoaded: boolean;
 };
 
 export const categoryStore = signalStore(
   { providedIn: 'root' },
   withState<CategoryState>({
     selectedId: null,
+    isLoaded: false,
   }),
   withRequestStatus(),
   withEntities<Category>(),
@@ -116,6 +111,7 @@ export const categoryStore = signalStore(
           categoryService.getUserCategories().pipe(
             tap((response) => {
               store.setMessage(response.message);
+              patchState(store, { isLoaded: true });
               patchState(store, setEntities(response.data));
             }),
             catchError((error: HttpErrorResponse) => {

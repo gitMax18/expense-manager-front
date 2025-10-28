@@ -22,6 +22,7 @@ import { accountStore } from '../../account-store';
         <app-display-account
           (onDelete)="handleDeleteAccount($event)"
           (onUpdate)="handleUpdateAccount($event)"
+          (onViewTransactions)="handleViewTransactions($event)"
           [account]="account"
           [isDeleteLoading]="accountStore.isLoading()"
         />
@@ -51,5 +52,10 @@ export class AccountPage {
 
   handleDeleteAccount(accountId: number) {
     this.accountStore.removeAccount(accountId);
+  }
+
+  handleViewTransactions(accountId: number) {
+    this.accountStore.setSelectedId(accountId);
+    void this.router.navigate([`/accounts/${accountId}/transactions`]);
   }
 }
