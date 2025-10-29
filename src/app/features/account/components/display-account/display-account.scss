@@ -1,13 +1,10 @@
 @use "variables" as v;
 
+.p-card {
+  cursor: pointer;
+}
+
 .display-account {
-  width: 100%;
-
-  .p-card {
-    width: 100%;
-    cursor: pointer;
-  }
-
   &__content {
     display: flex;
     flex-direction: column;
