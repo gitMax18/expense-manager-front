@@ -1,15 +1,10 @@
-import {
-  patchState,
-  signalStoreFeature,
-  withComputed,
-  withMethods,
-  withState,
-} from '@ngrx/signals';
+import { patchState, signalStoreFeature, withMethods, withState } from '@ngrx/signals';
 import { HttpRequestStatus } from '../types';
 
 export function withRequestStatus() {
   return signalStoreFeature(
     withState<HttpRequestStatus>({
+      isLoaded: false,
       isSuccess: undefined,
       isLoading: false,
       error: null,

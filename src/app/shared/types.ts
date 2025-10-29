@@ -4,6 +4,7 @@ export type SelectOption<TValue> = {
 };
 
 export type HttpRequestStatus = {
+  isLoaded: boolean;
   isSuccess: boolean | undefined;
   isLoading: boolean;
   message: string | null;

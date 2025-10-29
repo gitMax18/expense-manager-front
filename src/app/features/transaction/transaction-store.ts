@@ -38,12 +38,7 @@ export const transactionStore = signalStore(
           patchState(store, { selectedId: id });
         },
         setAccountId: (accountId: number | null) => {
-          if (store.accountId() === accountId) {
-            patchState(store, { selectedId: null });
-            return;
-          }
-
-          patchState(store, { accountId, selectedId: null });
+          patchState(store, { accountId, isLoaded: false });
         },
         loadAccountTransactions: rxMethod<number>(
           pipe(
@@ -54,6 +49,7 @@ export const transactionStore = signalStore(
               transactionService.getTransactionsByAccount(accountId).pipe(
                 tap((response) => {
                   patchState(store, setEntities(response.data));
+                  patchState(store, { isLoaded: true });
                 }),
                 catchError((error: HttpErrorResponse) => {
                   store.setError(error.error.error, error.error.details);

@@ -118,6 +118,7 @@ export const accountStore = signalStore(
             tap((response) => {
               store.setMessage(response.message);
               patchState(store, setEntities(response.data));
+              patchState(store, { isLoaded: true });
             }),
             catchError((error: HttpErrorResponse) => {
               store.setError(error.error.error, error.error.details);

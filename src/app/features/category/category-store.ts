@@ -16,14 +16,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 type CategoryState = {
   selectedId: number | null;
-  isLoaded: boolean;
 };
 
 export const categoryStore = signalStore(
   { providedIn: 'root' },
   withState<CategoryState>({
     selectedId: null,
-    isLoaded: false,
   }),
   withRequestStatus(),
   withEntities<Category>(),
