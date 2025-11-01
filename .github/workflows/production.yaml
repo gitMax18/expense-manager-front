@@ -19,6 +19,8 @@ jobs:
         with:
           node-version: 22.14.0
           cache: npm
+      - name: Install packages
+        run: npm install
       - name: build
         run: ng build --configuration ${{env.environment}}
   push-image:

@@ -21,6 +21,8 @@ jobs:
           cache: npm
       - name: Set up angular
         run: npm install -g @angular/cli
+      - name: Install packages
+        run: npm install
       - name: build
         run: ng build --configuration ${{env.environment}}
   push-image:
