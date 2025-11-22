@@ -1,5 +1,11 @@
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
-import { addEntity, removeEntity, setEntities, withEntities } from '@ngrx/signals/entities';
+import {
+  addEntity,
+  removeEntity,
+  setEntities,
+  setEntity,
+  withEntities,
+} from '@ngrx/signals/entities';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, finalize, pipe, switchMap, tap, throwError } from 'rxjs';
@@ -95,7 +101,7 @@ export const transactionStore = signalStore(
                 tap((response) => {
                   store.setMessage(response.message);
                   accStore.modifyAccount(response.data.account);
-                  patchState(store, addEntity(response.data));
+                  patchState(store, setEntity(response.data));
                 }),
                 catchError((error: HttpErrorResponse) => {
                   store.setError(error.error.error, error.error.details);

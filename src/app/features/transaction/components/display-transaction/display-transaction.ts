@@ -21,7 +21,7 @@ import { Category } from '../../../category/types';
           <p-chip
             [label]="transaction().type.toLowerCase()"
             [class]="
-              transactionService.isTransactionOut(transaction())
+              isTransactionOut()
                 ? 'display-transaction__chips display-transaction__chips--out'
                 : 'display-transaction__chips display-transaction__chips--in'
             "
@@ -81,6 +81,13 @@ export class DisplayTransaction {
   category = computed(() =>
     this.categories().find((category) => category.id === this.transaction().categoryId)
   );
+
+  isTransactionOut = computed(() => {
+    if (this.transactionService.isTransactionOut(this.transaction())) {
+      return true;
+    }
+    return false;
+  });
 
   private readonly typeSeverities: Record<
     TransactionType,
