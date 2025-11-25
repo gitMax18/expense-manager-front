@@ -5,6 +5,7 @@ import accountRoutes from './features/account/routes';
 import authRoutes from './core/auth/routes';
 import categoryRoutes from './features/category/routes';
 import transactionRoutes from './features/transaction/routes';
+import recuringTransactionRoutes from './features/recuring-transaction/routes';
 
 export const routes: Routes = [
   ...authRoutes,
@@ -12,6 +13,11 @@ export const routes: Routes = [
     path: '',
     component: MainLayout,
     canActivate: [authGuard],
-    children: [...accountRoutes, ...categoryRoutes, ...transactionRoutes],
+    children: [
+      ...accountRoutes,
+      ...categoryRoutes,
+      ...transactionRoutes,
+      ...recuringTransactionRoutes,
+    ],
   },
 ];

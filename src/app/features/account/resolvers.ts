@@ -16,8 +16,6 @@ export const accountResolver: ResolveFn<Account> = (route) => {
     throw new Error('Invalid account identifier');
   }
 
-  store.setSelectedId(accountId);
-
   if (!store.entities().length && !store.isLoading()) {
     store.getUserAccounts();
   }

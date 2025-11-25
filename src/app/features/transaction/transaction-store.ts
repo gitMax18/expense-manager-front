@@ -19,7 +19,6 @@ export const transactionStore = signalStore(
   { providedIn: 'root' },
   withState({
     selectedId: null as number | null,
-    accountId: null as number | null,
   }),
   withRequestStatus(),
   withEntities<Transaction>(),
@@ -42,9 +41,6 @@ export const transactionStore = signalStore(
       return {
         setSelectedId: (id: number | null) => {
           patchState(store, { selectedId: id });
-        },
-        setAccountId: (accountId: number | null) => {
-          patchState(store, { accountId, isLoaded: false });
         },
         loadAccountTransactions: rxMethod<number>(
           pipe(

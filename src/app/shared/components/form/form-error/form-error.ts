@@ -13,6 +13,8 @@ import { FormControl } from '@angular/forms';
       <div>{{ fieldName() }} must be at least {{ minLengthRequired() }} characters long.</div>
       } @if (control().hasError('min') && minValueRequired() !== null) {
       <div>{{ fieldName() }} must be at least {{ minValueRequired() }}.</div>
+      } @if (control().hasError('validateEndDate')) {
+      <div>{{ fieldName() }} must be after the start date.</div>
       }
     </div>
     } @if (errorDetails !== null && errorDetails()?.[fieldName().toLowerCase()]) {

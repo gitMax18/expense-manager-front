@@ -14,6 +14,7 @@ import { SelectOption } from '../../../../shared/types';
 import { HttpState } from '../../../../shared/abstract/http-state/http-state';
 import { accountStore } from '../../../account/account-store';
 import { categoryStore } from '../../../category/category-store';
+import { TransactionService } from '../../transaction-service';
 
 @Component({
   selector: 'app-upsert-transaction-form',
@@ -118,16 +119,9 @@ export class UpsertTransactionForm extends HttpState {
 
   readonly accountStore = inject(accountStore);
   readonly categoryStore = inject(categoryStore);
+  readonly transactionService = inject(TransactionService);
 
-  readonly transactionTypeOptions: SelectOption<string>[] = Object.entries(TransactionType).map(
-    ([key, value]) => {
-      return {
-        label: value.toLowerCase().replaceAll('_', ' '),
-        value: key,
-      };
-    }
-  );
-
+  readonly transactionTypeOptions = this.transactionService.getTransactionTypes();
   readonly btnLabel = computed(() => (this.transaction() ? 'Mettre à jour' : 'Créer'));
 
   readonly transactionForm = new FormGroup({

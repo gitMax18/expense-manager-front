@@ -1,0 +1,35 @@
+@use "variables" as v;
+
+.upsert-recuring-transaction-form {
+  display: flex;
+  flex-direction: column;
+  gap: v.$spacing-md;
+
+  &__grid {
+    display: grid;
+    gap: v.$spacing-md;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+    &--compact {
+      align-items: start;
+    }
+  }
+}
+
+.p-inputtext,
+.p-inputnumber,
+.p-select,
+.p-textarea,
+.p-button,
+.p-datepicker {
+  width: 100%;
+}
+
+.p-button {
+  margin-top: v.$spacing-sm;
+}
+
+.error {
+  color: v.$color-danger;
+  margin-top: v.$spacing-sm;
+}

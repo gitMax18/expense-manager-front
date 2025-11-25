@@ -42,3 +42,9 @@ Cette application sert a gérer ces dépenses en enregistrant les entrés et sor
 - L'application utilise primeng pour les composants de base
 - L'application utilise le scss
 - La méthode BEM est utilisé pour les class scss
+
+## CI/CD
+
+- 3 branches sont gérées par la CI/CD, dev (execute les tests), staging (test et création d'une image pour déploiment en stagging), prod (test et création d'une image pour déploiment en production)
+
+- Utilisation de github actions

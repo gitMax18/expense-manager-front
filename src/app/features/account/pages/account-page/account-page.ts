@@ -56,6 +56,6 @@ export class AccountPage {
 
   handleViewTransactions(accountId: number) {
     this.accountStore.setSelectedId(accountId);
-    void this.router.navigate([`/accounts/${accountId}/transactions`]);
+    this.router.navigate([`/accounts/${accountId}/transactions`]);
   }
 }

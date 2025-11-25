@@ -16,7 +16,6 @@ export const transactionAccountResolver: ResolveFn<true> = async (route): Promis
     throw new Error('Invalid account identifier');
   }
 
-  store.setAccountId(accountId);
   store.loadAccountTransactions(accountId);
 
   await firstValueFrom(

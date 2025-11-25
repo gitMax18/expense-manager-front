@@ -7,6 +7,7 @@ import { DisplayTransaction } from '../../components/display-transaction/display
 import { Transaction, UpsertTransaction } from '../../types';
 import { accountStore } from '../../../account/account-store';
 import { categoryStore } from '../../../category/category-store';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-transaction-page',
@@ -32,11 +33,18 @@ import { categoryStore } from '../../../category/category-store';
         }
       </div>
       <p-button
-        label="Nouvelle transaction"
+        label="New Transaction"
         icon="pi pi-plus"
         severity="success"
         [disabled]="isFormVisible()"
         (onClick)="handleCreateTransaction()"
+      />
+      <p-button
+        label="Recuring transaction"
+        icon="pi pi-plus"
+        severity="info"
+        [disabled]="isFormVisible()"
+        (onClick)="showRecuringTransactions()"
       />
     </section>
 
@@ -81,6 +89,7 @@ export class TransactionPage {
   readonly accountStore = inject(accountStore);
   readonly categoryStore = inject(categoryStore);
   readonly transactionStore = inject(transactionStore);
+  readonly router = inject(Router);
 
   readonly transactions = computed(() => {
     return this.transactionStore
@@ -137,5 +146,11 @@ export class TransactionPage {
     this.transactionStore.resetStatus();
     this.transactionStore.setSelectedId(null);
     this.isFormVisible.set(false);
+  }
+
+  showRecuringTransactions() {
+    this.router.navigate([
+      `/accounts/${this.accountStore.selectedAccount()?.id}/recurring-transactions`,
+    ]);
   }
 }

@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { SuccessResponse } from '../../shared/types';
+import { SelectOption, SuccessResponse } from '../../shared/types';
 import { Transaction, TransactionType, UpsertTransaction } from './types';
 import { Account } from '../account/types';
 
@@ -49,5 +49,14 @@ export class TransactionService {
       return true;
     }
     return false;
+  }
+
+  getTransactionTypes(): SelectOption<string>[] {
+    return Object.entries(TransactionType).map(([key, value]) => {
+      return {
+        label: value.toLowerCase().replaceAll('_', ' '),
+        value: key,
+      };
+    });
   }
 }
