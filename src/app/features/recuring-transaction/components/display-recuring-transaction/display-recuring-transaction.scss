@@ -1,0 +1,65 @@
+@use "variables" as v;
+
+.display-recuring-transaction {
+  &__card {
+    width: 100%;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: v.$spacing-sm;
+  }
+
+  &__title {
+    display: flex;
+    flex-direction: column;
+    gap: v.$spacing-xs;
+  }
+
+  &__label {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  &__meta {
+    margin: 0;
+    color: var(--p-text-color-secondary);
+    font-size: v.$font-size-sm;
+  }
+
+  &__chip {
+    font-size: v.$font-size-sm;
+    padding: v.$spacing-sm;
+
+    &--out {
+      background-color: v.$color-danger;
+    }
+
+    &--in {
+      background-color: v.$color-success;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: v.$spacing-sm;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    gap: v.$spacing-sm;
+  }
+
+  &__value {
+    font-weight: 500;
+  }
+
+  &__notes {
+    margin: 0;
+    color: var(--p-text-color-secondary);
+  }
+}

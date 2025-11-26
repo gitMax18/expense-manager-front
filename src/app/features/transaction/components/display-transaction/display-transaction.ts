@@ -3,7 +3,7 @@ import { Component, computed, inject, input, output, signal } from '@angular/cor
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { ChipModule } from 'primeng/chip';
-import { Transaction, TransactionType } from '../../types';
+import { Transaction } from '../../types';
 import { TransactionService } from '../../transaction-service';
 import { Category } from '../../../category/types';
 
@@ -21,7 +21,7 @@ import { Category } from '../../../category/types';
           <p-chip
             [label]="transaction().type.toLowerCase()"
             [class]="
-              isTransactionOut()
+              transactionService.isTransactionOut(transaction())
                 ? 'display-transaction__chips display-transaction__chips--out'
                 : 'display-transaction__chips display-transaction__chips--in'
             "
@@ -32,7 +32,7 @@ import { Category } from '../../../category/types';
       <div class="display-transaction__content">
         <div class="display-transaction__row">
           <span class="display-transaction__value">
-            {{ displayAmount() | currency : currency() }}
+            {{ transactionService.displayAmount(transaction()) | currency : currency() }}
           </span>
           <span class="display-transaction__meta">
             {{ transaction().createdAt | date : 'short' }}
@@ -78,37 +78,10 @@ export class DisplayTransaction {
   onDelete = output<number>();
 
   isShowActions = signal<boolean>(false);
+
   category = computed(() =>
     this.categories().find((category) => category.id === this.transaction().categoryId)
   );
-
-  isTransactionOut = computed(() => {
-    if (this.transactionService.isTransactionOut(this.transaction())) {
-      return true;
-    }
-    return false;
-  });
-
-  private readonly typeSeverities: Record<
-    TransactionType,
-    'success' | 'danger' | 'info' | 'warning'
-  > = {
-    [TransactionType.EXPENSE]: 'danger',
-    [TransactionType.INCOME]: 'success',
-    [TransactionType.TRANSFER_IN]: 'info',
-    [TransactionType.TRANSFER_OUT]: 'warning',
-  };
-
-  readonly typeSeverity = computed(() => this.typeSeverities[this.transaction().type]);
-  readonly displayAmount = computed(() => {
-    const amount = this.transaction().amount;
-
-    if (this.transactionService.isTransactionOut(this.transaction())) {
-      return amount > 0 ? amount * -1 : amount;
-    }
-
-    return amount < 0 ? amount * -1 : amount;
-  });
 
   handleUpdate() {
     this.onUpdate.emit(this.transaction());

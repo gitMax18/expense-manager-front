@@ -28,3 +28,5 @@ export type BaseEntity = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type DataType = 'success' | 'danger' | 'info' | 'warning';

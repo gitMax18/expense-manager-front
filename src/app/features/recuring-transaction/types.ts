@@ -1,4 +1,4 @@
-import { TransactionType } from '../transaction/types';
+import { Transaction, TransactionType } from '../transaction/types';
 import { BaseEntity } from '../../shared/types';
 import { Account } from '../account/types';
 
@@ -20,14 +20,6 @@ export enum DayOfWeek {
 }
 
 export type RecuringTransaction = {
-  id: number;
-  amount: number;
-  type: TransactionType;
-  label: string;
-  notes?: string | null;
-  merchant?: string | null;
-  account: Account;
-  categoryId?: number | null;
   frequency: RecurrenceFrequency;
   startDate: Date;
   endDate?: Date | null;
@@ -37,7 +29,7 @@ export type RecuringTransaction = {
   executionTime?: string | null;
   nextExecutionDate: string | null;
   isActive: boolean;
-} & BaseEntity;
+} & Transaction;
 
 export type UpsertRecuringTransaction = {
   amount: number;

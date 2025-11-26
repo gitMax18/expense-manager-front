@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { SelectOption, SuccessResponse } from '../../shared/types';
+import { DataType, SelectOption, SuccessResponse } from '../../shared/types';
 import { Transaction, TransactionType, UpsertTransaction } from './types';
 import { Account } from '../account/types';
 
@@ -10,6 +10,13 @@ import { Account } from '../account/types';
 })
 export class TransactionService {
   private readonly http = inject(HttpClient);
+
+  private readonly typeSeverities: Record<TransactionType, DataType> = {
+    [TransactionType.EXPENSE]: 'danger',
+    [TransactionType.INCOME]: 'success',
+    [TransactionType.TRANSFER_IN]: 'info',
+    [TransactionType.TRANSFER_OUT]: 'warning',
+  };
 
   createTransaction(request: UpsertTransaction) {
     return this.http.post<SuccessResponse<Transaction>>(
@@ -51,6 +58,15 @@ export class TransactionService {
     return false;
   }
 
+  displayAmount(transaction: Transaction) {
+    const amount = transaction.amount;
+    if (this.isTransactionOut(transaction)) {
+      return amount > 0 ? amount * -1 : amount;
+    }
+
+    return amount < 0 ? amount * -1 : amount;
+  }
+
   getTransactionTypes(): SelectOption<string>[] {
     return Object.entries(TransactionType).map(([key, value]) => {
       return {
@@ -58,5 +74,9 @@ export class TransactionService {
         value: key,
       };
     });
+  }
+
+  getTypeSeverity(transaction: Transaction): DataType {
+    return this.typeSeverities[transaction.type];
   }
 }

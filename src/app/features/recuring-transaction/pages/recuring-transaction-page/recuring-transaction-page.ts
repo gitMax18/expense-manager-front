@@ -1,14 +1,19 @@
-import { Component, inject, output, signal } from '@angular/core';
-import { accountStore } from '../../../account/account-store';
+import { CommonModule } from '@angular/common';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
+import { accountStore } from '../../../account/account-store';
+import { categoryStore } from '../../../category/category-store';
+import { DisplayRecuringTransaction } from '../../components/display-recuring-transaction/display-recuring-transaction';
 import { UpsertRecuringTransactionForm } from '../../components/upsert-recuring-transaction-form/upsert-recuring-transaction-form';
 import { recuringTransactionStore } from '../../recuring-transaction-store';
 import { UpsertRecuringTransaction } from '../../types';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-recuring-transaction-page',
-  imports: [ButtonModule, UpsertRecuringTransactionForm],
+  host: {
+    class: 'recuring-transaction-page',
+  },
+  imports: [CommonModule, ButtonModule, UpsertRecuringTransactionForm, DisplayRecuringTransaction],
   template: `
     <section class="recuring-transaction-page__header">
       <div>
@@ -29,7 +34,7 @@ import { HttpErrorResponse } from '@angular/common/http';
     </section>
 
     @if (isFormVisible()) {
-    <section class="transaction-page__form">
+    <section class="recuring-transaction-page__form">
       <app-upsert-recuring-transaction-form
         [isLoading]="recuringTransactionStore.isLoading()"
         [serverError]="recuringTransactionStore.error()"
@@ -37,24 +42,66 @@ import { HttpErrorResponse } from '@angular/common/http';
         [serverErrorDetails]="recuringTransactionStore.errorDetails()"
         (onSubmit)="handleSubmit($event)"
       />
-      <div class="transaction-page__form-actions">
+      <div class="recuring-transaction-page__form-actions">
         <p-button label="Annuler" severity="danger" (onClick)="handleCancel()" />
       </div>
     </section>
     }
+
+    <p class="recuring-transaction-page__meta">
+      {{ recuringTransactionStore.recuringTransactionCount() }} transaction{{
+        recuringTransactionStore.recuringTransactionCount() > 1 ? 's' : ''
+      }}
+    </p>
+
+    <section class="recuring-transaction-page__list">
+      @if (!recuringTransactions().length && !recuringTransactionStore.isLoading() &&
+      !isFormVisible()) {
+      <p class="recuring-transaction-page__empty">Aucune transaction récurrente pour ce compte.</p>
+      } @else { @for (transaction of recuringTransactions(); track transaction.id) {
+      <app-display-recuring-transaction
+        [recuringTransaction]="transaction"
+        [categories]="categoryStore.entities()"
+        [currency]="currency()"
+      />
+      } }
+    </section>
   `,
   styleUrl: './recuring-transaction-page.scss',
 })
 export class RecuringTransactionPage {
   readonly accountStore = inject(accountStore);
+  readonly categoryStore = inject(categoryStore);
   readonly recuringTransactionStore = inject(recuringTransactionStore);
   readonly isFormVisible = signal(false);
+  readonly recuringTransactions = computed(() => {
+    return [...this.recuringTransactionStore.entities()].sort((a, b) => {
+      const aDate = new Date(a.nextExecutionDate ?? a.startDate).getTime();
+      const bDate = new Date(b.nextExecutionDate ?? b.startDate).getTime();
+      return bDate - aDate;
+    });
+  });
+  readonly currency = computed(() => this.accountStore.selectedAccount()?.currency ?? 'EUR');
+
+  constructor() {
+    effect(() => {
+      if (!this.categoryStore.entities().length && !this.categoryStore.isLoading()) {
+        this.categoryStore.getUserCategories();
+      }
+    });
+  }
+
+  ngOnInit() {
+    this.recuringTransactionStore.loadAccountRecuringTransactions(this.accountStore.selectedId()!);
+  }
 
   handleCreateRecuringTransaction() {
+    this.recuringTransactionStore.resetStatus();
     this.isFormVisible.set(true);
   }
 
   handleCancel() {
+    this.recuringTransactionStore.resetStatus();
     this.isFormVisible.set(false);
   }
 
