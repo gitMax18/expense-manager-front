@@ -8,9 +8,16 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: v.$spacing-sm;
   }
 
-  &__chips {
+  &__badges {
+    display: flex;
+    align-items: center;
+    gap: v.$spacing-xs;
+  }
+
+  &__chip {
     font-size: v.$font-size-sm;
     padding: v.$spacing-sm;
     &--out {
@@ -18,6 +25,9 @@
     }
     &--in {
       background-color: v.$color-success;
+    }
+    &--recurring {
+      background-color: var(--p-blue-500);
     }
   }
 

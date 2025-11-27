@@ -17,6 +17,7 @@ export type Transaction = {
   merchant?: string | null;
   account: Account;
   categoryId?: number | null;
+  isRecurringTransaction: boolean;
 } & BaseEntity;
 
 export type UpsertTransaction = {

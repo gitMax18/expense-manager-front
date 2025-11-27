@@ -18,14 +18,23 @@ import { Category } from '../../../category/types';
       <ng-template #title>
         <div class="display-transaction__header">
           <span class="display-transaction__label">{{ transaction().label || 'No label' }}</span>
-          <p-chip
-            [label]="transaction().type.toLowerCase()"
-            [class]="
-              transactionService.isTransactionOut(transaction())
-                ? 'display-transaction__chips display-transaction__chips--out'
-                : 'display-transaction__chips display-transaction__chips--in'
-            "
-          />
+          <div class="display-transaction__badges">
+            @if (transaction().isRecurringTransaction) {
+            <p-chip
+              label="Récurrente"
+              icon="pi pi-refresh"
+              class="display-transaction__chip display-transaction__chip--recurring"
+            />
+            }
+            <p-chip
+              [label]="transaction().type.toLowerCase()"
+              [class]="
+                transactionService.isTransactionOut(transaction())
+                  ? 'display-transaction__chip display-transaction__chip--out'
+                  : 'display-transaction__chip display-transaction__chip--in'
+              "
+            />
+          </div>
         </div>
       </ng-template>
 

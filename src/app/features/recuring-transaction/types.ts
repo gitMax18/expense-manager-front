@@ -1,6 +1,4 @@
 import { Transaction, TransactionType } from '../transaction/types';
-import { BaseEntity } from '../../shared/types';
-import { Account } from '../account/types';
 
 export enum RecurrenceFrequency {
   DAILY = 'DAILY',
@@ -29,7 +27,7 @@ export type RecuringTransaction = {
   executionTime?: string | null;
   nextExecutionDate: string | null;
   isActive: boolean;
-} & Transaction;
+} & Omit<Transaction, 'isRecurringTransaction'>;
 
 export type UpsertRecuringTransaction = {
   amount: number;
