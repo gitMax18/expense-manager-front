@@ -27,7 +27,7 @@ export type RecuringTransaction = {
   executionTime?: string | null;
   nextExecutionDate: string | null;
   isActive: boolean;
-} & Omit<Transaction, 'isRecurringTransaction'>;
+} & Transaction;
 
 export type UpsertRecuringTransaction = {
   amount: number;

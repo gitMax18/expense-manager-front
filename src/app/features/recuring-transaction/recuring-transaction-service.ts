@@ -33,6 +33,13 @@ export class RecuringTransactionService {
     );
   }
 
+  updateRecuringTransaction(id: number, recuringTransaction: UpsertRecuringTransaction) {
+    return this.http.put<SuccessResponse<RecuringTransaction>>(
+      `${environment.apiUrl}/recuring-transactions/${id}`,
+      recuringTransaction
+    );
+  }
+
   getFrequencyOptions(): SelectOption<RecurrenceFrequency>[] {
     return [
       { label: 'Daily', value: RecurrenceFrequency.DAILY },

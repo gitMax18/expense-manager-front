@@ -1,5 +1,5 @@
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
-import { addEntity, setEntities, withEntities } from '@ngrx/signals/entities';
+import { addEntity, setEntities, setEntity, withEntities } from '@ngrx/signals/entities';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, finalize, pipe, switchMap, tap, throwError } from 'rxjs';
@@ -75,6 +75,30 @@ export const recuringTransactionStore = signalStore(
                 store.stopLoading();
               })
             )
+          )
+        )
+      ),
+      updateRecuringTransaction: rxMethod<UpsertRecuringTransaction>(
+        pipe(
+          tap(() => {
+            store.startLoading();
+          }),
+          switchMap((transaction) =>
+            recuringTransactionService
+              .updateRecuringTransaction(store.selectedId()!, transaction)
+              .pipe(
+                tap((response) => {
+                  store.setMessage(response.message);
+                  patchState(store, setEntity(response.data));
+                }),
+                catchError((error: HttpErrorResponse) => {
+                  store.setError(error.error.error, error.error.details);
+                  return throwError(() => error);
+                }),
+                finalize(() => {
+                  store.stopLoading();
+                })
+              )
           )
         )
       ),

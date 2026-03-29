@@ -1,5 +1,5 @@
 import { TransactionService } from './../../../transaction/transaction-service';
-import { Component, computed, effect, inject, output } from '@angular/core';
+import { Component, computed, effect, inject, input, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
@@ -15,7 +15,12 @@ import { accountStore } from '../../../account/account-store';
 import { categoryStore } from '../../../category/category-store';
 import { TransactionType } from '../../../transaction/types';
 import { HttpState } from '../../../../shared/abstract/http-state/http-state';
-import { DayOfWeek, RecurrenceFrequency, UpsertRecuringTransaction } from '../../types';
+import {
+  DayOfWeek,
+  RecurrenceFrequency,
+  RecuringTransaction,
+  UpsertRecuringTransaction,
+} from '../../types';
 import { RecuringTransactionService } from '../../recuring-transaction-service';
 import AppValidators from '../../../../shared/validators/appValidators';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -249,6 +254,7 @@ import { DateTimeService } from '../../../../shared/service/DateTimeService';
   styleUrl: './upsert-recuring-transaction-form.scss',
 })
 export class UpsertRecuringTransactionForm extends HttpState {
+  readonly recuringTransaction = input<RecuringTransaction | null>(null);
   readonly onSubmit = output<UpsertRecuringTransaction>();
 
   readonly accountStore = inject(accountStore);
@@ -261,7 +267,9 @@ export class UpsertRecuringTransactionForm extends HttpState {
   readonly frequencyOptions = this.recuringTransactionService.getFrequencyOptions();
   readonly dayOfWeekOptions = this.recuringTransactionService.getDayOfWeekOptions();
 
-  readonly btnLabel = computed(() => 'Planifier la transaction');
+  readonly btnLabel = computed(() =>
+    this.recuringTransaction() ? 'Mettre à jour la transaction' : 'Planifier la transaction'
+  );
 
   readonly recurringTransactionForm = new FormGroup({
     accountId: new FormControl<number | null>(this.accountStore.selectedId(), {
@@ -311,6 +319,45 @@ export class UpsertRecuringTransactionForm extends HttpState {
     effect(() => {
       if (!this.categoryStore.entities().length && !this.categoryStore.isLoading()) {
         this.categoryStore.getUserCategories();
+      }
+    });
+
+    effect(() => {
+      const transaction = this.recuringTransaction();
+      if (transaction) {
+        this.recurringTransactionForm.patchValue({
+          accountId: transaction.account.id,
+          amount: transaction.amount,
+          type: transaction.type,
+          label: transaction.label ?? '',
+          merchant: transaction.merchant ?? '',
+          categoryId: transaction.categoryId ?? null,
+          notes: transaction.notes ?? '',
+          frequency: transaction.frequency,
+          startDate: new Date(transaction.startDate),
+          endDate: transaction.endDate ? new Date(transaction.endDate) : null,
+          dayOfMonth: transaction.dayOfMonth ?? null,
+          monthOfYear: transaction.monthOfYear ?? null,
+          dayOfWeek: transaction.dayOfWeek ?? null,
+          executionTime: this.toDateFromTime(transaction.executionTime ?? null),
+        });
+      } else {
+        this.recurringTransactionForm.reset({
+          accountId: this.accountStore.selectedId(),
+          amount: 0,
+          type: TransactionType.EXPENSE,
+          label: '',
+          merchant: '',
+          categoryId: null,
+          notes: '',
+          frequency: RecurrenceFrequency.MONTHLY,
+          startDate: null,
+          endDate: null,
+          dayOfMonth: null,
+          monthOfYear: null,
+          dayOfWeek: null,
+          executionTime: null,
+        });
       }
     });
 
@@ -373,6 +420,17 @@ export class UpsertRecuringTransactionForm extends HttpState {
     };
 
     this.onSubmit.emit(payload as UpsertRecuringTransaction);
+  }
+
+  private toDateFromTime(time: string | null) {
+    if (!time) {
+      return null;
+    }
+
+    const [hours, minutes] = time.split(':').map((value) => Number(value));
+    const date = new Date();
+    date.setHours(hours, minutes, 0, 0);
+    return date;
   }
 
   // private applyFrequencyValidators(frequency: RecurrenceFrequency) {

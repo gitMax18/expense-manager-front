@@ -6,7 +6,7 @@ import { categoryStore } from '../../../category/category-store';
 import { DisplayRecuringTransaction } from '../../components/display-recuring-transaction/display-recuring-transaction';
 import { UpsertRecuringTransactionForm } from '../../components/upsert-recuring-transaction-form/upsert-recuring-transaction-form';
 import { recuringTransactionStore } from '../../recuring-transaction-store';
-import { UpsertRecuringTransaction } from '../../types';
+import { RecuringTransaction, UpsertRecuringTransaction } from '../../types';
 
 @Component({
   selector: 'app-recuring-transaction-page',
@@ -40,6 +40,7 @@ import { UpsertRecuringTransaction } from '../../types';
         [serverError]="recuringTransactionStore.error()"
         [serverMessage]="recuringTransactionStore.message()"
         [serverErrorDetails]="recuringTransactionStore.errorDetails()"
+        [recuringTransaction]="recuringTransactionStore.selectedRecuringTransaction()"
         (onSubmit)="handleSubmit($event)"
       />
       <div class="recuring-transaction-page__form-actions">
@@ -63,6 +64,7 @@ import { UpsertRecuringTransaction } from '../../types';
         [recuringTransaction]="transaction"
         [categories]="categoryStore.entities()"
         [currency]="currency()"
+        (onUpdate)="handleEditRecuringTransaction($event)"
       />
       } }
     </section>
@@ -89,6 +91,13 @@ export class RecuringTransactionPage {
         this.categoryStore.getUserCategories();
       }
     });
+    effect(() => {
+      if (this.recuringTransactionStore.isSuccess()) {
+        this.recuringTransactionStore.resetStatus();
+        this.recuringTransactionStore.setSelectedId(null);
+        this.isFormVisible.set(false);
+      }
+    });
   }
 
   ngOnInit() {
@@ -97,15 +106,28 @@ export class RecuringTransactionPage {
 
   handleCreateRecuringTransaction() {
     this.recuringTransactionStore.resetStatus();
+    this.recuringTransactionStore.setSelectedId(null);
     this.isFormVisible.set(true);
   }
 
   handleCancel() {
     this.recuringTransactionStore.resetStatus();
+    this.recuringTransactionStore.setSelectedId(null);
     this.isFormVisible.set(false);
   }
 
   handleSubmit(recuringTransaction: UpsertRecuringTransaction) {
+    if (this.recuringTransactionStore.selectedRecuringTransaction()) {
+      this.recuringTransactionStore.updateRecuringTransaction(recuringTransaction);
+      return;
+    }
+
     this.recuringTransactionStore.addRecuringTransaction(recuringTransaction);
+  }
+
+  handleEditRecuringTransaction(recuringTransaction: RecuringTransaction) {
+    this.recuringTransactionStore.resetStatus();
+    this.recuringTransactionStore.setSelectedId(recuringTransaction.id);
+    this.isFormVisible.set(true);
   }
 }

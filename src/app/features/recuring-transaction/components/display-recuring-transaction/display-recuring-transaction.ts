@@ -1,8 +1,9 @@
 import { RecuringTransaction } from './../../types';
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { ChipModule } from 'primeng/chip';
+import { ButtonModule } from 'primeng/button';
 import { Category } from '../../../category/types';
 import { TransactionService } from '../../../transaction/transaction-service';
 
@@ -11,7 +12,7 @@ import { TransactionService } from '../../../transaction/transaction-service';
   host: {
     class: 'display-recuring-transaction',
   },
-  imports: [CardModule, ChipModule, CurrencyPipe, DatePipe],
+  imports: [CardModule, ChipModule, ButtonModule, CurrencyPipe, DatePipe],
   template: `
     <p-card class="display-recuring-transaction__card">
       <ng-template #title>
@@ -78,6 +79,16 @@ import { TransactionService } from '../../../transaction/transaction-service';
         <p class="display-recuring-transaction__notes">{{ recuringTransaction().notes }}</p>
         }
       </div>
+
+      <div class="display-recuring-transaction__actions">
+        <p-button
+          label="Modifier"
+          icon="pi pi-pencil"
+          severity="info"
+          size="small"
+          (onClick)="onUpdate.emit(recuringTransaction())"
+        />
+      </div>
     </p-card>
   `,
   styleUrl: './display-recuring-transaction.scss',
@@ -88,6 +99,7 @@ export class DisplayRecuringTransaction {
   readonly recuringTransaction = input.required<RecuringTransaction>();
   readonly currency = input.required<string>();
   readonly categories = input.required<Category[]>();
+  readonly onUpdate = output<RecuringTransaction>();
 
   category = computed(() =>
     this.categories().find((category) => category.id === this.recuringTransaction().categoryId)
