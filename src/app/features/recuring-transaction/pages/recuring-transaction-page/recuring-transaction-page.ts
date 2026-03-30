@@ -65,6 +65,7 @@ import { RecuringTransaction, UpsertRecuringTransaction } from '../../types';
         [categories]="categoryStore.entities()"
         [currency]="currency()"
         (onUpdate)="handleEditRecuringTransaction($event)"
+        (onChangeStatus)="handleChangeStatusRecuringTransaction($event)"
       />
       } }
     </section>
@@ -129,5 +130,11 @@ export class RecuringTransactionPage {
     this.recuringTransactionStore.resetStatus();
     this.recuringTransactionStore.setSelectedId(recuringTransaction.id);
     this.isFormVisible.set(true);
+  }
+
+  handleChangeStatusRecuringTransaction(recuringTransaction: RecuringTransaction) {
+    this.recuringTransactionStore.resetStatus();
+    this.recuringTransactionStore.setSelectedId(recuringTransaction.id);
+    this.recuringTransactionStore.changeStatusRecuringTransaction(recuringTransaction);
   }
 }

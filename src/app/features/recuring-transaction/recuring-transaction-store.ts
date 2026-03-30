@@ -102,6 +102,28 @@ export const recuringTransactionStore = signalStore(
           )
         )
       ),
+      changeStatusRecuringTransaction: rxMethod<RecuringTransaction>(
+        pipe(
+          tap(() => {
+            store.startLoading();
+          }),
+          switchMap((transaction) =>
+            recuringTransactionService.changeStatusRecuringTransaction(transaction).pipe(
+              tap((response) => {
+                store.setMessage(response.message);
+                patchState(store, setEntity(response.data));
+              }),
+              catchError((error: HttpErrorResponse) => {
+                store.setError(error.error.error, error.error.details);
+                return throwError(() => error);
+              }),
+              finalize(() => {
+                store.stopLoading();
+              })
+            )
+          )
+        )
+      ),
       // updateTransaction: rxMethod<UpsertTransaction>(
       //   pipe(
       //     tap(() => {

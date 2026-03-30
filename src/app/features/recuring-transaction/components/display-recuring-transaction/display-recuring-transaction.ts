@@ -88,6 +88,13 @@ import { TransactionService } from '../../../transaction/transaction-service';
           size="small"
           (onClick)="onUpdate.emit(recuringTransaction())"
         />
+        <p-button
+          [label]="recuringTransaction().isActive ? 'Pause' : 'Activer'"
+          [icon]="recuringTransaction().isActive ? 'pi pi-pause' : 'pi pi-play'"
+          severity="info"
+          size="small"
+          (onClick)="onChangeStatus.emit(recuringTransaction())"
+        />
       </div>
     </p-card>
   `,
@@ -100,6 +107,7 @@ export class DisplayRecuringTransaction {
   readonly currency = input.required<string>();
   readonly categories = input.required<Category[]>();
   readonly onUpdate = output<RecuringTransaction>();
+  readonly onChangeStatus = output<RecuringTransaction>();
 
   category = computed(() =>
     this.categories().find((category) => category.id === this.recuringTransaction().categoryId)

@@ -40,6 +40,14 @@ export class RecuringTransactionService {
     );
   }
 
+  changeStatusRecuringTransaction(transaction: RecuringTransaction) {
+    const action = transaction.isActive ? 'pause' : 'resume';
+    return this.http.post<SuccessResponse<RecuringTransaction>>(
+      `${environment.apiUrl}/recuring-transactions/${transaction.id}/${action}`,
+      null
+    );
+  }
+
   getFrequencyOptions(): SelectOption<RecurrenceFrequency>[] {
     return [
       { label: 'Daily', value: RecurrenceFrequency.DAILY },
