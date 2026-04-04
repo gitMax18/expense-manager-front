@@ -4,7 +4,7 @@ import { ChartModule } from 'primeng/chart';
 @Component({
   selector: 'app-pie-chart',
   imports: [ChartModule],
-  template: `<div class="card flex justify-center">
+  template: `<div>
     <p-chart type="pie" [data]="data" [options]="options" />
   </div>`,
   styleUrl: './pie-chart.scss',
