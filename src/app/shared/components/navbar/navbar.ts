@@ -36,6 +36,7 @@ export class Navbar {
   authService = inject(AuthService);
 
   items: MenuItem[] = [
+    { label: 'Dashbord', icon: 'pi pi-fw pi-home', routerLink: '/dashbord' },
     { label: 'Accounts', icon: 'pi pi-fw pi-home', routerLink: '/accounts' },
     { label: 'Categories', icon: 'pi pi-fw pi-home', routerLink: '/category' },
   ];

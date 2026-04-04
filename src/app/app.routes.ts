@@ -6,6 +6,7 @@ import authRoutes from './core/auth/routes';
 import categoryRoutes from './features/category/routes';
 import transactionRoutes from './features/transaction/routes';
 import recuringTransactionRoutes from './features/recuring-transaction/routes';
+import dashbordRoutes from './features/dashbord/routes';
 
 export const routes: Routes = [
   ...authRoutes,
@@ -18,6 +19,7 @@ export const routes: Routes = [
       ...categoryRoutes,
       ...transactionRoutes,
       ...recuringTransactionRoutes,
+      ...dashbordRoutes,
     ],
   },
 ];
