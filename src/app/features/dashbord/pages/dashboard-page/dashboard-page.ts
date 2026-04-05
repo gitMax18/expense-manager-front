@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { Dashbord } from '../../components/dashbord/dashbord';
 
 @Component({
-  selector: 'app-dashbord-page',
+  selector: 'app-dashboard-page',
   imports: [Dashbord],
   template: `
     <section>
-      <app-dashbord />
+      <app-dashboard />
     </section>
   `,
-  styleUrl: './dashbord-page.scss',
+  styleUrl: './dashboard-page.scss',
 })
 export class DashbordPage {}

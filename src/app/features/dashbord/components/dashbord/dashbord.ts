@@ -3,7 +3,7 @@ import { Card } from 'primeng/card';
 import { PieChart } from '../../../charts/components/pie-chart/pie-chart';
 
 @Component({
-  selector: 'app-dashbord',
+  selector: 'app-dashboard',
   imports: [Card, PieChart],
   template: `
     <p-card>
@@ -15,6 +15,6 @@ import { PieChart } from '../../../charts/components/pie-chart/pie-chart';
       </div>
     </p-card>
   `,
-  styleUrl: './dashbord.scss',
+  styleUrl: './dashboard.scss',
 })
 export class Dashbord {}
