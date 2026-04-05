@@ -2,10 +2,16 @@
 
 .p-inputtext,
 .p-textarea,
-.p-button {
+.p-button,
+.p-colorpicker,
+.p-colorpicker-preview {
   width: 100%;
 }
-
+::ng-deep {
+  .p-colorpicker-preview {
+    width: 100%;
+  }
+}
 .p-button {
   margin-top: v.$spacing-sm;
 }

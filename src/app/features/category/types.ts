@@ -4,9 +4,11 @@ export type Category = {
   id: number;
   name: string;
   description: string;
+  color: string;
 } & BaseEntity;
 
 export type UpsertCategory = {
   name: string;
   description: string;
+  color: string;
 };

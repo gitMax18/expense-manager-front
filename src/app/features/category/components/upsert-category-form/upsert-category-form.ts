@@ -9,6 +9,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { ButtonModule } from 'primeng/button';
 import { DisplayServerResponse } from '../../../../shared/components/display-server-response/display-server-response';
 import { HttpState } from '../../../../shared/abstract/http-state/http-state';
+import { ColorPickerModule } from 'primeng/colorpicker';
 
 @Component({
   selector: 'app-upsert-category-form',
@@ -24,6 +25,7 @@ import { HttpState } from '../../../../shared/abstract/http-state/http-state';
     TextareaModule,
     ButtonModule,
     DisplayServerResponse,
+    ColorPickerModule,
   ],
   template: `
     <form [formGroup]="categoryForm" (ngSubmit)="handleSubmit()">
@@ -40,6 +42,10 @@ import { HttpState } from '../../../../shared/abstract/http-state/http-state';
       <app-form-item>
         <app-form-label for="description">Description</app-form-label>
         <textarea id="description" rows="4" formControlName="description" pTextarea></textarea>
+      </app-form-item>
+      <app-form-item>
+        <app-form-label for="color">Color</app-form-label>
+        <p-colorpicker formControlName="color" />
       </app-form-item>
 
       <app-display-server-response [error]="serverError()" [message]="serverMessage()" />
@@ -60,12 +66,14 @@ export class UpsertCategoryForm extends HttpState {
 
   isUpdate = computed(() => this.category() != null);
   btnLabel = computed(() => (this.isUpdate() ? 'Mettre à jour' : 'Créer'));
+  readonly defaultColor = '#6466f1';
 
   readonly categoryForm = new FormGroup({
     name: new FormControl('', {
       validators: [Validators.required, Validators.minLength(3)],
     }),
     description: new FormControl(''),
+    color: new FormControl(this.defaultColor),
   });
 
   constructor() {
@@ -75,6 +83,7 @@ export class UpsertCategoryForm extends HttpState {
         this.categoryForm.patchValue({
           name: this.category()!.name,
           description: this.category()!.description ?? '',
+          color: this.category()!.color ?? this.defaultColor,
         });
       } else {
         this.categoryForm.reset({
