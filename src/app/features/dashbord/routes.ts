@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { DashbordPage } from './pages/dashbord-page/dashbord-page';
+import { DashbordPage } from './pages/dashboard-page/dashboard-page';
 
 export default [
   {
